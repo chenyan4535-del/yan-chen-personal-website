@@ -65,9 +65,16 @@ const i18n = {
   }
 };
 
-function getLanguage() { return localStorage.getItem("site_lang") || "en"; }
+function getStorageKey() {
+  return document.body.dataset.langKey || "site_lang";
+}
+function getLanguage() {
+  const saved = localStorage.getItem(getStorageKey());
+  if (saved) return saved;
+  return document.documentElement.lang && document.documentElement.lang.startsWith("zh") ? "zh" : "en";
+}
 function setLanguage(lang) {
-  localStorage.setItem("site_lang", lang);
+  localStorage.setItem(getStorageKey(), lang);
   document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
 }
 function applyTranslations() {
